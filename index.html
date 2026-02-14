@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Important Question</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cat {
+            position: absolute;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+            opacity: 0.9;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+            75% {
+                transform: translateY(-15px) rotate(-5deg);
+            }
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .heart-img {
+            font-size: 80px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            10%, 30% {
+                transform: scale(1.1);
+            }
+            20%, 40% {
+                transform: scale(1.05);
+            }
+        }
+
+        h1 {
+            color: #e74c3c;
+            margin: 20px 0;
+            font-size: 2em;
+        }
+
+        .question {
+            font-size: 1.3em;
+            color: #333;
+            margin: 20px 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            min-height: 120px;
+            align-items: center;
+            position: relative;
+        }
+
+        button {
+            font-size: 1.2em;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #yesBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: relative;
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        #noBtn {
+            background: #ecf0f1;
+            color: #7f8c8d;
+            position: absolute;
+        }
+
+        #noBtn:hover {
+            background: #d5dbdb;
+        }
+
+        .celebration {
+            display: none;
+            text-align: center;
+        }
+
+        .celebration.active {
+            display: block;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .celebration h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, #e74c3c, #e91e63, #9c27b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 30px 0;
+            animation: rainbow 3s ease-in-out infinite;
+        }
+
+        @keyframes rainbow {
+            0%, 100% {
+                filter: hue-rotate(0deg);
+            }
+            50% {
+                filter: hue-rotate(30deg);
+            }
+        }
+
+        .celebration p {
+            font-size: 1.5em;
+            color: #555;
+            margin: 20px 0;
+        }
+
+        .hearts {
+            font-size: 50px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #e74c3c;
+            position: absolute;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background music -->
+    <audio id="bgMusic" loop>
+        <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav">
+    </audio>
+
+    <div class="container">
+        <div id="questionScreen">
+            <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="Cat typing" class="heart-img" style="width: 200px; height: auto; border-radius: 10px;">
+            <h1>💕</h1>
+            <div class="question" id="question">Will you be my Valentine?</div>
+            <div class="button-container" id="buttonContainer">
+                <button id="yesBtn">Yes! 💗</button>
+                <button id="noBtn">No</button>
+            </div>
+        </div>
+
+        <div class="celebration" id="celebration">
+            <div class="hearts">💕 💖 💗 💝 💘</div>
+            <h1>Happy Valentines Day!!</h1>
+            <div class="hearts">💕 💖 💗 💝 💘</div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "Are you sure? 🤔",
+            "Like... REALLY sure?",
+            "You might want to rethink that.",
+            "The Yes button is looking pretty good.",
+            "The cats are disappointed 🐱",
+            "This feels like a mistake.",
+            "Last chance to change your answer..."
+        ];
+
+        let noClickCount = 0;
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const questionEl = document.getElementById('question');
+        const questionScreen = document.getElementById('questionScreen');
+        const celebration = document.getElementById('celebration');
+        const bgMusic = document.getElementById('bgMusic');
+        const buttonContainer = document.getElementById('buttonContainer');
+
+        // Floating cats removed for cleaner look
+
+
+        // Start background music (Super Mario Bros theme - 50% FASTER & SUPER UPBEAT!)
+        function playMusic() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'square'; // Classic 8-bit sound
+            oscillator.frequency.value = 0;
+            gainNode.gain.value = 0.1;
+            
+            oscillator.start();
+            
+            // Super Mario Bros main theme melody - 50% FASTER!
+            const melody = [
+                { note: 659.25, duration: 75 },   // E
+                { note: 659.25, duration: 150 },  // E
+                { note: 0, duration: 75 },        // rest
+                { note: 659.25, duration: 150 },  // E
+                { note: 0, duration: 75 },        // rest
+                { note: 523.25, duration: 150 },  // C
+                { note: 659.25, duration: 150 },  // E
+                { note: 0, duration: 75 },        // rest
+                { note: 783.99, duration: 225 },  // G
+                { note: 0, duration: 225 },       // rest
+                { note: 392.00, duration: 225 },  // G (low)
+                { note: 0, duration: 225 },       // rest
+                
+                { note: 523.25, duration: 225 },  // C
+                { note: 0, duration: 150 },       // rest
+                { note: 392.00, duration: 150 },  // G (low)
+                { note: 0, duration: 150 },       // rest
+                { note: 329.63, duration: 225 },  // E (low)
+                { note: 0, duration: 150 },       // rest
+                { note: 440.00, duration: 150 },  // A
+                { note: 0, duration: 75 },        // rest
+                { note: 493.88, duration: 150 },  // B
+                { note: 0, duration: 75 },        // rest
+                { note: 466.16, duration: 150 },  // A#
+                { note: 440.00, duration: 150 },  // A
+                { note: 0, duration: 75 },        // rest
+                
+                { note: 392.00, duration: 100 },  // G (low)
+                { note: 659.25, duration: 100 },  // E
+                { note: 783.99, duration: 100 },  // G
+                { note: 880.00, duration: 150 },  // A
+                { note: 0, duration: 75 },        // rest
+                { note: 698.46, duration: 150 },  // F
+                { note: 783.99, duration: 150 },  // G
+                { note: 0, duration: 75 },        // rest
+                { note: 659.25, duration: 150 },  // E
+                { note: 0, duration: 75 },        // rest
+                { note: 523.25, duration: 150 },  // C
+                { note: 587.33, duration: 150 },  // D
+                { note: 493.88, duration: 150 },  // B
+                { note: 0, duration: 150 },       // rest
+            ];
+            
+            let index = 0;
+            
+            function playNextNote() {
+                const current = melody[index % melody.length];
+                oscillator.frequency.value = current.note;
+                index++;
+                setTimeout(playNextNote, current.duration);
+            }
+            
+            playNextNote();
+        }
+
+        // Handle No button click
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Switch to absolute positioning on first click
+            if (noClickCount === 0) {
+                noBtn.style.position = 'absolute';
+            }
+            
+            if (noClickCount < questions.length) {
+                questionEl.textContent = questions[noClickCount];
+                
+                // Shrink No button - but only to 60% minimum to keep it clickable
+                const currentSize = parseFloat(window.getComputedStyle(noBtn).fontSize);
+                const currentPadding = parseFloat(window.getComputedStyle(noBtn).paddingTop);
+                const shrinkFactor = currentSize > 14 ? 0.85 : 1; // Stop shrinking when too small
+                noBtn.style.fontSize = (currentSize * shrinkFactor) + 'px';
+                noBtn.style.padding = (currentPadding * shrinkFactor) + 'px ' + (currentPadding * 1.3) + 'px';
+                
+                // Grow Yes button
+                const yesSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+                const yesPadding = parseFloat(window.getComputedStyle(yesBtn).paddingTop);
+                yesBtn.style.fontSize = (yesSize * 1.2) + 'px';
+                yesBtn.style.padding = (yesPadding * 1.15) + 'px ' + (yesPadding * 1.8) + 'px';
+                
+                // Move No button to random position - ensure it's far from Yes button
+                const containerRect = buttonContainer.getBoundingClientRect();
+                const btnRect = noBtn.getBoundingClientRect();
+                const yesRect = yesBtn.getBoundingClientRect();
+                
+                const maxX = containerRect.width - btnRect.width - 40;
+                const maxY = containerRect.height - btnRect.height - 40;
+                
+                let randomX, randomY;
+                let attempts = 0;
+                
+                // Keep trying positions until we find one far enough from Yes button
+                do {
+                    randomX = Math.random() * maxX;
+                    randomY = Math.random() * maxY;
+                    attempts++;
+                } while (attempts < 10 && (
+                    Math.abs(randomX - (yesRect.left - containerRect.left)) < 150 &&
+                    Math.abs(randomY - (yesRect.top - containerRect.top)) < 80
+                ));
+                
+                noBtn.style.left = randomX + 'px';
+                noBtn.style.top = randomY + 'px';
+                
+                noClickCount++;
+            } else {
+                // Last click - convert No to Yes
+                noBtn.textContent = 'Yes! 💗';
+                noBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                noBtn.style.color = 'white';
+                noBtn.onclick = showCelebration;
+            }
+            
+            if (noClickCount === 1) {
+                playMusic();
+            }
+        });
+
+        // Handle Yes button click
+        yesBtn.addEventListener('click', showCelebration);
+
+        function showCelebration() {
+            questionScreen.style.display = 'none';
+            celebration.classList.add('active');
+            createConfetti();
+        }
+
+        function createConfetti() {
+            const colors = ['#e74c3c', '#e91e63', '#9c27b0', '#667eea', '#f39c12', '#2ecc71'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 30);
+            }
+        }
+
+        // Initial setup - position buttons side by side
+        window.addEventListener('DOMContentLoaded', () => {
+            // No button will move to absolute positioning only after first click
+            noBtn.style.position = 'relative';
+        });
+    </script>
+</body>
+</html>
